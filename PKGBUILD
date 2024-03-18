@@ -1,18 +1,18 @@
 # Maintainer: Norbert Preining <norbert@preining.info>
-pkgname=plasma-gamemode-git
-pkgver=r4.3adea2b
-pkgrel=2
-pkgdesc="Gamemode UI for the Plasma Desktop"
-provides=("${pkgname%-git}")
-conflicts=("${pkgname%-git}")
+pkgname=plasma5-gamemode
+pkgver=0.0.1
+pkgrel=1
+pkgdesc="Gamemode UI for the Plasma5 Desktop"
+provides=("plasma-gamemode")
+conflicts=("plasma-gamemode")
 arch=('x86_64')
-url="https://invent.kde.org/sitter/${pkgname%-git}"
-license=('MIT' 'BSD' 'GPL2' 'GPL3' 'LGPL' 'custom:CC0')
+url="https://invent.kde.org/detiam/plasma-gamemode"
+license=('MIT' 'BSD-3-Clause' 'GPL-2.0-only' 'GPL-3.0-only' 'LGPL-3.0-only' 'CC0-1.0')
 depends=(
+  'kirigami2'
+  'gcc-libs'
   'gamemode'
   'fontconfig'
-  'freetype2'
-  'pkgconf'
   'qt5-base>=5.15.0'
   'kcoreaddons5>=5.82'
   'kdbusaddons5>=5.82'
@@ -22,17 +22,12 @@ depends=(
   'kservice5>=5.82'
   'plasma-framework5>=5.82')
 
-makedepends=('git' 'cmake>=3.16' 'extra-cmake-modules>=5.82')
-source=(git+${url}.git)
+makedepends=('git' 'pkgconf' 'cmake>=3.16' 'extra-cmake-modules>=5.82')
+source=("git+${url}.git")
 sha256sums=('SKIP')
 
-pkgver() {
-	cd "$srcdir/${pkgname%-git}"
-	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-}
-
 build() {
-	cmake -B build -S "$srcdir/${pkgname%-git}" \
+	cmake -B build -S "$srcdir/plasma-gamemode" \
 		-DCMAKE_INSTALL_PREFIX='/usr' \
 		-DCMAKE_BUILD_TYPE='None' \
 		-Wno-dev 
@@ -46,5 +41,5 @@ check() {
 
 package() {
 	DESTDIR="$pkgdir" cmake --install build
-	install -Dm 644 -t "${pkgdir}/usr/share/licenses/${pkgname}" "$srcdir/${pkgname%-git}"/LICENSES/*
+	install -Dm 644 -t "${pkgdir}/usr/share/licenses/${pkgname}" "$srcdir/plasma-gamemode"/LICENSES/*
 }
